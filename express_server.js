@@ -27,13 +27,19 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+// app.get("/urls/:id/delete", (req, res) => {
+//   delete urlDatabase[req.params.id];
+//   let templateVars = { urls: urlDatabase};
+//   res.render("urls_index", templateVars)
+// });
 
-app.post("/urls/:id/delete", (req, res) =>{
-  let deletedURL = req.params.id
-  console.log(deletedURL);
-  console.log(urlDatabase);
-  res.redirect("/urls")
-})
+//remove a URL resource
+app.post("/urls/:id/delete", (req, res) => {
+  let targetID = req.params.id;
+  delete urlDatabase[targetID];
+  res.redirect("/urls");
+});
+
 
 //connects the longURL with the short url when put into url bar
 app.get("/u/:shortURL", (req, res) => {
