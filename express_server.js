@@ -19,9 +19,13 @@ app.post("/urls", (req, res) => {
   urlDatabase[randomVariable] = req.body['longURL'];
   console.log(urlDatabase[randomVariable], randomVariable);
   console.log(urlDatabase)
-  res.send()
+  res.redirect("/urls/" + randomVariable);
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  // let longURL = ...
+  res.redirect(longURL);
+});
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
@@ -37,10 +41,6 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
-  res.render("urls_show", templateVars);
-});
 
 function getRandomString() {
   let emptyKey = '';
