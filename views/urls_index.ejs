@@ -2,26 +2,31 @@
 <html lang="en">
 
 <head>
-  <title>TinyApp</title>
+  <%- include partials/_head %>
 </head>
 
 <body>
 
   <header>
-    <%- include partials/_header %>
+  <%- include partials/_header %>
   </header>
 
-  <h1> URLS </h1>
-    <ul>
+  <h1><center> URLS </center></h1>
+<h1>
+  <center><iframe src="https://giphy.com/embed/fCVd3k7u9qoRa" width="480" height="278" frameBorder="0" class="giphy-embed"
+allowFullScreen></iframe></center>
+</h1>
+<ul>
+  <center>
     <% for(let key in urls) { %>
     <li>
     <%= key %> :  <%= urls[key] %> : href ="#" <br>
     </li>
     <% } %>
+  </center>
     </ul>
 </body>
 
+<%- include partials/_footer %>
+
 </html>
-
-
-
