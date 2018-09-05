@@ -8,28 +8,28 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs")
 
-function getRandomString() {
-  let emptyKey = '';
-  let alphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-  let alphaNumericlength = alphaNumeric.length
-  for (let i = 0; i < 6; i++) {
-    emptyKey += alphaNumeric.substr(Math.floor((Math.random() * alphaNumericlength) + 1), 1)
-  }
-  return emptyKey
-}
-
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 }
 
+
+app.post("/urls", (req, res) => {
+  var randomVariable = getRandomString();
+  urlDatabase[randomVariable] = req.body['longURL'];
+  console.log(urlDatabase[randomVariable], randomVariable);
+  console.log(urlDatabase)
+  res.send()
+});
+
+
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.post("/urls", (req, res) => {
-  console.log(req.body);
-  res.send("Ok");
+app.get("/urls/:id", (req, res) => {
+  let templateVars = {shortURL: req.params.id, longURL: urlDatabase[req.params.id]};
+  res.render("urls_show", templateVars);
 });
 
 app.get("/urls", (req, res) => {
@@ -52,8 +52,6 @@ function getRandomString() {
   }
   return emptyKey
 }
-
-getRandomString()
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
