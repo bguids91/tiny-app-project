@@ -15,30 +15,39 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 }
 
-
+//newly made alphanumeric shirtURL to post to our urls page
 app.post("/urls", (req, res) => {
   let randomVariable = getRandomString();
   urlDatabase[randomVariable] = req.body['longURL'];
-  console.log(urlDatabase[randomVariable], randomVariable);
-  console.log(urlDatabase)
   res.redirect("/urls/" + randomVariable);
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  console.log(req.params.shortURL);
-  let longURL = urlDatabase[req.params.shortURL]
-  res.redirect(longURL);
-});
-
+//updating the urlDatabase
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+
+app.post("/urls/:id/delete", (req, res) =>{
+  let deletedURL = req.params.id
+  console.log(deletedURL);
+  console.log(urlDatabase);
+  res.redirect("/urls")
+})
+
+//connects the longURL with the short url when put into url bar
+app.get("/u/:shortURL", (req, res) => {
+  let longURL = urlDatabase[req.params.shortURL]
+  res.redirect(longURL);
+});
+
+//goes to new page with the shortURL and longURL
 app.get("/urls/:id", (req, res) => {
   let templateVars = {shortURL: req.params.id, longURL: urlDatabase[req.params.id]};
   res.render("urls_show", templateVars);
 });
 
+//adds short and long urls to the index page
 app.get("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);

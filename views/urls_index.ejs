@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-  <%- include partials/_head %>
 </head>
 
 <body>
@@ -12,21 +11,22 @@
   </header>
 
   <h1><center> URLS </center></h1>
-<h1>
-  <center><iframe src="https://giphy.com/embed/fCVd3k7u9qoRa" width="480" height="278" frameBorder="0" class="giphy-embed"
-allowFullScreen></iframe></center>
-</h1>
-<ul>
-  <center>
-    <% for(let key in urls) { %>
-    <li>
-    <%= key %> :  <%= urls[key] %> : href ="#" <br>
-    </li>
-    <% } %>
-  </center>
+
+  <h1>
+  </h1>
+<h3>
+</h3>
+</h3>
+    <ul>
+      <% for(let key in urls) { %>
+      <li>
+      <%= [key] %> : <a href="/urls/<%= [key] %>"><%= urls[key] %></a>
+      <button><form method="POST" action="/urls/delete">Delete</form></button>
+      <% } %>
+      <br>
+      </li>
     </ul>
 </body>
 
-<%- include partials/_footer %>
 
 </html>
