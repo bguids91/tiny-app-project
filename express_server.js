@@ -12,25 +12,25 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
+
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
-app.get("/urls", (req, res) => {
-  var username;
-  if (req.cookies) {
-    username = req.cookies.username;
-  } else {
-    username = undefined;
-  }
-  let templateVars = {
-    username: username,
-    urls: urlDatabase
-  };
-  res.render("urls_index", templateVars);
-});
 
 //updating the urlDatabase
 app.get("/urls/new", (req, res) => {
@@ -112,12 +112,39 @@ app.get("/register", (req, res) => {
     res.render("urls_register", templateVars);
   });
 
-  app.post("/register", (req, res) => {
-    let username = req.body.username;
-    res.cookie('username', username);
-    res.redirect("/urls")
+app.post("/register", (req, res) => {
+  let username = req.body.username;
+  let password = req.body.password;
+  // console.log(req.body)
+  // console.log(username)
+  // console.log(password)
+  let id = getRandomString();
+  if (password === '' || username === '') {
+    console.log('ERROR')
+    res.redirect("/register")
   }
-)
+  if (username === users[id]) {
+    console.log('same username')
+    res.redirect("/register")
+  }
+  else {
+  newUser = {id: id, email: username, password: password};
+  users[id] = newUser
+  res.cookie('user_id', id);
+  res.redirect("/urls")
+  }
+});
+
+app.get("/urls", (req, res) => {
+
+  let templateVars = {
+    username: users[res.cookie.id],
+    urls: urlDatabase
+  };
+  // console.log(templateVars)
+  res.render("urls_index", templateVars);
+});
+
 
 function getRandomString() {
   let emptyKey = '';
