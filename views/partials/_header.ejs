@@ -2,20 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<% if (!username) { %>
-    <form method ="POST" action="/login">
-          <label for="username"><b>Username</b></label>
-          <input name="username" type="text" >
-          <button type="submit">Login</button>
-    </form>
-<% } else{ %>
 <h1>
   Welcome, <%= username %>
 </h1>
   <form method="POST" action="/logout" >
     <button type="submit">Logout</button>
   </form>
-<% } %>
-
-<!-- <label for="psw"><b>Password</b></label>
-        <input name="psw" type="password" > -->

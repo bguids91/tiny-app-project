@@ -53,7 +53,6 @@ app.post("/urls", (req, res) => {
   console.log("test");
   console.log(urlDatabase);
   res.redirect('/urls');
-  //res.redirect("/urls/" + randomVariable);
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -100,6 +99,25 @@ app.post("/urls/:id/delete", (req, res) => {
   res.redirect("/urls");
 });
 
+app.get("/register", (req, res) => {
+  var username;
+    if (req.cookies) {
+      username = req.cookies.username;
+    } else {
+      username = undefined;
+    }
+    let templateVars = {
+      username: username
+    }
+    res.render("urls_register", templateVars);
+  });
+
+  app.post("/register", (req, res) => {
+    let username = req.body.username;
+    res.cookie('username', username);
+    res.redirect("/urls")
+  }
+)
 
 function getRandomString() {
   let emptyKey = '';
