@@ -20,7 +20,7 @@ const urlDatabase = {
 };
 
 app.get("/urls", (req, res) => {
-  var username;
+  var usernamse;
   if (req.cookies) {
     username = req.cookies.username;
   } else {
@@ -51,7 +51,10 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
   let randomVariable = getRandomString();
   urlDatabase[randomVariable] = req.body['longURL'];
-  res.redirect("/urls/" + randomVariable);
+  console.log("test");
+  console.log(urlDatabase);
+  res.redirect('/urls');
+  //res.redirect("/urls/" + randomVariable);
 });
 
 app.get("/u/:shortURL", (req, res) => {

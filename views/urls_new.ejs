@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-</head>
+<header>
+  <%- include partials/_header %>
+</header>
+
 
 <body style="font-size:20px; padding:0px;">
-  <%- include partials/_header %>
 
 
-<h3><center><form action="/urls" method="POST" style="margin:150px;">
+
+  <form action="/urls" method="POST" style="margin:150px;">
     <label for="longURL"></label>
-    <input id="longURL" type="text" name="longURL" placeholder="http://" style="width:300px">
-    <input type="submit" value="Submit">
-  </form></center></h3>
-</h3>
+    <input id="longURL" type="text" name="longURL" placeholder="http://" style="width:300px" />
+    <input type="submit" value="Submit" />
+  </form>
+
 
 </body>
 </html>
