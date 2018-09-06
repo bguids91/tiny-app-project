@@ -1,6 +1,5 @@
 //Worked with @Archaicghost and @alefiyaV
 
-
 var express = require("express");
 var app = express();
 var PORT = 8080;
@@ -20,7 +19,7 @@ const urlDatabase = {
 };
 
 app.get("/urls", (req, res) => {
-  var usernamse;
+  var username;
   if (req.cookies) {
     username = req.cookies.username;
   } else {
@@ -50,7 +49,7 @@ app.get("/urls/new", (req, res) => {
 //newly made alphanumeric shirtURL to post to our urls page
 app.post("/urls", (req, res) => {
   let randomVariable = getRandomString();
-  urlDatabase[randomVariable] = req.body['longURL'];
+  urlDatabase[randomVariable] = req.body.longURL;
   console.log("test");
   console.log(urlDatabase);
   res.redirect('/urls');
@@ -65,21 +64,21 @@ app.get("/u/:shortURL", (req, res) => {
 //goes to new page with the shortURL and longURL
 app.get("/urls/:id", (req, res) => {
   var username;
-  let templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
-    username: username
-  };
   if (req.cookies) {
     username = req.cookies.username;
   } else {
     username = undefined;
   }
+  let templateVars = {
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    username: username
+  }
   res.render("urls_show", templateVars);
 });
 
 app.post("/login", (req, res) => {
-  let username = req.body['username'];
+  let username = req.body.username;
   res.cookie('username', username);
   res.redirect("/urls")
 });
@@ -91,7 +90,7 @@ app.post("/logout", (req, res) => {
 
 app.post("/urls/:id", (req, res) => {
   let targetID = req.params.id
-  urlDatabase[targetID] = req.body['longURL'];
+  urlDatabase[targetID] = req.body.longURL;
   res.redirect("/urls")
 });
 
@@ -117,28 +116,19 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-// app.get("/urls/:id/delete", (req, res) => {
-//   delete urlDatabase[req.params.id];
-//   let templateVars = { urls: urlDatabase};
-//   res.render("urls_index", templateVars)
-// });
 
-
-
-
-//allows the longURL to be edited
 // app.get("/urls/:id/edit", (req, res) => {
-//    if (req.cookies) {
-//      username = req.cookies.username;
-//    } else {
-//      username = undefined;
-//    }
-//   let targetID = req.params.id;
+//   let username = req.params.id;
+//   if (req.cookies) {
+//     username = req.cookies.username;
+//   } else {
+//     username = undefined;
+//   }
 //   let templateVars = {
-//     username: req.cookies["username"],
+//     username: username,
 //     shortURL: req.params.id,
 //     longURL: urlDatabase[targetID]
 //   }
 //   res.render("urls_show", templateVars)
 // });
-//takes the new longURL and updates in object
+
