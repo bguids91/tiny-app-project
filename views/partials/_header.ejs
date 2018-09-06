@@ -3,16 +3,24 @@
 <html lang="en">
 
 <body>
-    <header id="header">
-    <%= username %>
+    <header>
+<% if (!username) { %>
+    <h1>
       <form method ="POST" action="/login">
-
-        <label for="username"><b>Username</b></label>
-        <input name="username" type="text" >
-
-        <!-- <label for="psw"><b>Password</b></label>
-        <input name="psw" type="password" > -->
-
-      <button type="submit">Login</button>
-    </form>
+          <label for="username"><b>Username</b></label>
+          <input name="username" type="text" >
+          <button type="submit">Login</button>
+    </form></h1>
+<% } else{ %>
+<h1>
+  Welcome, <%= username %>
+  <form method="POST" action="/logout">
+  <button type="submit">Logout</button>
+</h1>
+<% } %>
   </header>
+</body>
+</html>
+
+<!-- <label for="psw"><b>Password</b></label>
+        <input name="psw" type="password" > -->
