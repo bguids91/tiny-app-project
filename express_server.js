@@ -19,11 +19,11 @@ app.listen(PORT, () => {
 //Database
 const urlDatabase = {
  "b2xVn2": {
-    "b2xVn2": "http://www.lighthouselabs.ca",
+    longURL: "http://www.lighthouselabs.ca",
      userID: "userRandomID"
   },
   "9sm5xK": {
-    "9sm5xK": "http://www.google.com",
+    longURL: "http://www.google.com",
     userID: "userRandomID"
 }};
 
@@ -31,13 +31,13 @@ const urlDatabase = {
 const users = {
   "userRandomID": {
     id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    email: "ben@example.com",
+    password: "ben"
   },
   "user2RandomID": {
     id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
+    email: "ben2@example.com",
+    password: "ben2"
   }
 }
 
@@ -65,25 +65,25 @@ function getEmail(newUserEmail) {
 
 //Login function
 function checkUserCredentials(email, pwd) {
-  for (var key in users) {
-    if (users[key].email === email && users[key].password === pwd) {
-      return true;
+  for (var keys in users) {
+    if (users[keys].email === email && users[keys].password === pwd) {
+      return users[keys];
     }
-    return false;
   }
 }
 
 //Find username attached to email
 function findUserID(email) {
   for (keys in users) {
-    if (users[keys].email === users[keys].id){
+    if (users[keys].email === email){
+      return users[keys].id
+    }
   }
-  return users[keys].id
-}
 }
 
+//Checks through object to find keys that match with user id
 function urlsForUser(id) {
-  userURLS = {}
+  userURLS = []
   for (keys in urlDatabase) {
     if (urlDatabase[keys].userID = id) {
       userURLS += urlDatabase[keys]
@@ -94,8 +94,6 @@ function urlsForUser(id) {
 
 //Login Get
 app.get("/login", (req, res) => {
-  let userID = findUserID(req.body.email)
-  console.log(userID);
   let templateVars = {
     user: users[userID]
   }
@@ -108,10 +106,11 @@ app.post("/login", (req, res) => {
   let email = req.body.email;
   let userID = findUserID(email);
   console.log(userID);
-  if (checkUserCredentials(email, password)) {
-    res.cookie("user_id", userID)
+  let user = checkUserCredentials(email, password);
+    if (user) {
+     res.cookie("user_id", userID)
     res.redirect("/urls")
-  } else {
+    } else {
     res.send(403);
   }
 });
@@ -155,20 +154,20 @@ app.get("/urls", (req, res) => {
   let userURLS = urlsForUser(userID)
   let templateVars = {
     user: users[req.cookies["user_id"]],
-    urls: userURLS
+    urls: urlDatabase
   };
-  console.log(userURLS)
   res.render("urls_index", templateVars);
 });
 
 //Index Post
 app.post("/urls", (req, res) => {
-  let userID = req.cookie["user_id"]
+  let userID = req.cookies["user_id"]
   let randomVariable = getRandomString();
   urlDatabase[randomVariable] = {
-    randomVariable: req.body.longURL,
+    longURL: req.body.longURL,
     userID: userID
   }
+  console.log(urlDatabase)
   res.redirect('/urls');
 });
 
@@ -187,14 +186,16 @@ app.get("/urls/new", (req, res) => {
 
 //new post post
 app.post("/urls/:id", (req, res) => {
-  let targetID = req.params.id
-  let userID = req.cookie["user_id"]
-  let userURLS = urlsForUser(userID)
-  urlDatabase[targetID] = {
-    targetID: req.body.longURL,
-    userID: userID
-  }
+  let shortURL = req.params.id
+  let newLongURL = req.body['longURL']
+  let userID = req.cookies["user_id"]
+  if (shortURL.userID === userID) {
+  urlDatabase[shortURL].longURL = newLongURL;
   res.redirect("/urls")
+  } else {
+    res.redirect("/urls")
+    res.send("Sorry!")
+  }
 });
 
 //New short URL
