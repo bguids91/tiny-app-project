@@ -20,11 +20,11 @@ app.listen(PORT, () => {
 const urlDatabase = {
  "b2xVn2": {
     "b2xVn2": "http://www.lighthouselabs.ca",
-     user_id: 'userRandomID'
+     userID: "userRandomID"
   },
   "9sm5xK": {
     "9sm5xK": "http://www.google.com",
-    user_id: "userRandomID"
+    userID: "userRandomID"
 }};
 
 //Users
@@ -66,17 +66,38 @@ function getEmail(newUserEmail) {
 //Login function
 function checkUserCredentials(email, pwd) {
   for (var key in users) {
-    if (users[key].email === email && users[key].password) {
-      return users[key];
+    if (users[key].email === email && users[key].password === pwd) {
+      return true;
     }
+    return false;
   }
 }
 
+//Find username attached to email
+function findUserID(email) {
+  for (keys in users) {
+    if (users[keys].email === users[keys].id){
+  }
+  return users[keys].id
+}
+}
+
+function urlsForUser(id) {
+  userURLS = {}
+  for (keys in urlDatabase) {
+    if (urlDatabase[keys].userID = id) {
+      userURLS += urlDatabase[keys]
+    }
+    return userURLS
+  }
+}
 
 //Login Get
 app.get("/login", (req, res) => {
+  let userID = findUserID(req.body.email)
+  console.log(userID);
   let templateVars = {
-    user: users[req.cookies["user_id"]]
+    user: users[userID]
   }
   res.render("urls_login", templateVars);
 });
@@ -84,16 +105,15 @@ app.get("/login", (req, res) => {
 //Login Post
 app.post("/login", (req, res) => {
   let password = req.body.password;
-  let user_id = req.body.user_id
-
-  let user = checkUserCredentials(user_id, password);
-  if (user) {
-    res.cookie('user_id', user_id);
+  let email = req.body.email;
+  let userID = findUserID(email);
+  console.log(userID);
+  if (checkUserCredentials(email, password)) {
+    res.cookie("user_id", userID)
     res.redirect("/urls")
   } else {
     res.send(403);
   }
-
 });
 
 //Register Get
@@ -118,7 +138,7 @@ app.post("/register", (req, res) => {
       password: password
     };
     users[id] = newUser
-    res.cookie('user_id', id);
+    res.cookie("user_id", id);
     res.redirect("/urls")
   }
 });
@@ -131,21 +151,24 @@ app.post("/logout", (req, res) => {
 
 //Index Get
 app.get("/urls", (req, res) => {
+  let userID = req.cookies["user_id"]
+  let userURLS = urlsForUser(userID)
   let templateVars = {
     user: users[req.cookies["user_id"]],
-    urls: urlDatabase
+    urls: userURLS
   };
+  console.log(userURLS)
   res.render("urls_index", templateVars);
 });
 
 //Index Post
 app.post("/urls", (req, res) => {
+  let userID = req.cookie["user_id"]
   let randomVariable = getRandomString();
   urlDatabase[randomVariable] = {
     randomVariable: req.body.longURL,
-    userID: req.cookie.user_id
+    userID: userID
   }
-  console.log(urlDatabase);
   res.redirect('/urls');
 });
 
@@ -165,7 +188,12 @@ app.get("/urls/new", (req, res) => {
 //new post post
 app.post("/urls/:id", (req, res) => {
   let targetID = req.params.id
-  urlDatabase[targetID] = req.body.longURL;
+  let userID = req.cookie["user_id"]
+  let userURLS = urlsForUser(userID)
+  urlDatabase[targetID] = {
+    targetID: req.body.longURL,
+    userID: userID
+  }
   res.redirect("/urls")
 });
 
@@ -188,7 +216,7 @@ app.get("/urls/:id", (req, res) => {
 
 //Delete Post
 app.post("/urls/:id/delete", (req, res) => {
-  let targetID = req.params.id;
+  let targetID = req.params.id
   delete urlDatabase[targetID];
   res.redirect("/urls");
 });
