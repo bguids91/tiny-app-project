@@ -57,9 +57,9 @@ function getEmail(newUserEmail) {
 }
 
 //Login function
-function checkUserCredentials(email, pwd){
+function checkUserCredentials(userID, pwd){
   for(var key in users){
-    if(users[key].email === email && users[key].password){
+    if(users[key].userID === userID && users[key].password){
       return users[key];
     }
   }
@@ -83,7 +83,7 @@ app.post("/login", (req, res) => {
     res.cookie('user_id', user.id);
     res.redirect("/urls")
   } else{
-    res.send("Sorry! Username or password does not match");
+    res.send(403);
   }
 
 });
