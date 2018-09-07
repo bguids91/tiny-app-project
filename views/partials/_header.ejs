@@ -11,7 +11,9 @@
 <% if (!user.id)  {%>
 <a href="/register">Register</a>
 <a href="/login">Login</a>
+
 <% } else { %>
+
 <form method="POST" action="/logout">
   <button type="submit">Logout</button>
 </form>

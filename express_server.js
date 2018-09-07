@@ -20,7 +20,7 @@ app.listen(PORT, () => {
 const urlDatabase = {
  "b2xVn2": {
     longURL: "http://www.lighthouselabs.ca",
-     userID: "userRandomID"
+    userID: "userRandomID"
   },
   "9sm5xK": {
     longURL: "http://www.google.com",
@@ -83,21 +83,18 @@ function findUserID(email) {
 
 //Checks through object to find keys that match with user id
 function urlsForUser(id) {
-  userURLS = []
-  for (keys in urlDatabase) {
-    if (urlDatabase[keys].userID = id) {
-      userURLS += urlDatabase[keys]
+  let userURLS = {}
+  for (key in urlDatabase) {
+    if (urlDatabase[key].userID === id) {
+      userURLS[key] = urlDatabase[key]
     }
-    return userURLS
   }
+  return userURLS
 }
 
 //Login Get
 app.get("/login", (req, res) => {
-  let templateVars = {
-    user: users[userID]
-  }
-  res.render("urls_login", templateVars);
+  res.render("urls_login");
 });
 
 //Login Post
@@ -105,7 +102,6 @@ app.post("/login", (req, res) => {
   let password = req.body.password;
   let email = req.body.email;
   let userID = findUserID(email);
-  console.log(userID);
   let user = checkUserCredentials(email, password);
     if (user) {
      res.cookie("user_id", userID)
@@ -151,23 +147,27 @@ app.post("/logout", (req, res) => {
 //Index Get
 app.get("/urls", (req, res) => {
   let userID = req.cookies["user_id"]
-  let userURLS = urlsForUser(userID)
+  if (!userID) {
+    res.redirect('/login');
+  } else {
+  let sortedData = urlsForUser(userID);
+  console.log(sortedData);
   let templateVars = {
-    user: users[req.cookies["user_id"]],
-    urls: urlDatabase
+    user: users[userID],
+    urls: sortedData
   };
   res.render("urls_index", templateVars);
+}
 });
 
 //Index Post
 app.post("/urls", (req, res) => {
-  let userID = req.cookies["user_id"]
+  let userID = req.cookies["user_id"];
   let randomVariable = getRandomString();
   urlDatabase[randomVariable] = {
     longURL: req.body.longURL,
     userID: userID
   }
-  console.log(urlDatabase)
   res.redirect('/urls');
 });
 
@@ -194,21 +194,22 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls")
   } else {
     res.redirect("/urls")
-    res.send("Sorry!")
   }
 });
 
 //New short URL
 app.get("/u/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
+  let shortURL = req.params.shortURL;
+  let longURL = urlDatabase[shortURL].longURL
   res.redirect(longURL);
 });
 
 //Page with URL ID
 app.get("/urls/:id", (req, res) => {
+  shortURL = req.params.id
   let templateVars = {
     shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
+    longURL: urlDatabase[shortURL],
     user: users[req.cookies["user_id"]]
   }
   res.render("urls_show", templateVars);
@@ -217,7 +218,12 @@ app.get("/urls/:id", (req, res) => {
 
 //Delete Post
 app.post("/urls/:id/delete", (req, res) => {
-  let targetID = req.params.id
-  delete urlDatabase[targetID];
-  res.redirect("/urls");
+  let shortURL = req.params.id;
+  let userID = req.cookies["user_id"];
+  if (userID === urlDatabase[shortURL].userID) {
+    delete urlDatabase[shortURL];
+    res.redirect("/urls")
+  } else {
+    res.redirect("/urls")
+  }
 });
