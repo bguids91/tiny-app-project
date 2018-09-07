@@ -13,15 +13,17 @@
   <h1> URLS </h1>
 
   <p>
-    <%= shortURL %> : <%= longURL %>
+    <%= shortURL %> :
+    <%= longURL %>
   </p>
   <form method="POST" action="/urls/<%= shortURL %>">
-  <p>
-    <label for="longURL">LongURL</label>
-<input id="longURL" type="text" name="longURL" placeholder="http://" style="width:300px" />
-    <button type="submit">Update My URL!</button>
-  </p>
+    <p>
+      <label for="longURL">LongURL</label>
+      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width:300px" />
+      <button type="submit">Update My URL!</button>
+    </p>
 
-</form>
+  </form>
 </body>
+
 </html>

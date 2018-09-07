@@ -6,7 +6,9 @@ var cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.set("view engine", "ejs");
 
 //Listen
@@ -16,9 +18,14 @@ app.listen(PORT, () => {
 
 //Database
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
+ "b2xVn2": {
+    "b2xVn2": "http://www.lighthouselabs.ca",
+     user_id: 'userRandomID'
+  },
+  "9sm5xK": {
+    "9sm5xK": "http://www.google.com",
+    user_id: "userRandomID"
+}};
 
 //Users
 const users = {
@@ -57,13 +64,14 @@ function getEmail(newUserEmail) {
 }
 
 //Login function
-function checkUserCredentials(userID, pwd){
-  for(var key in users){
-    if(users[key].userID === userID && users[key].password){
+function checkUserCredentials(email, pwd) {
+  for (var key in users) {
+    if (users[key].email === email && users[key].password) {
       return users[key];
     }
   }
 }
+
 
 //Login Get
 app.get("/login", (req, res) => {
@@ -76,13 +84,13 @@ app.get("/login", (req, res) => {
 //Login Post
 app.post("/login", (req, res) => {
   let password = req.body.password;
-  let userID = req.body.userID
+  let user_id = req.body.user_id
 
-  let user = checkUserCredentials(userID, password);
-  if(user){
-    res.cookie('user_id', user.id);
+  let user = checkUserCredentials(user_id, password);
+  if (user) {
+    res.cookie('user_id', user_id);
     res.redirect("/urls")
-  } else{
+  } else {
     res.send(403);
   }
 
@@ -133,18 +141,25 @@ app.get("/urls", (req, res) => {
 //Index Post
 app.post("/urls", (req, res) => {
   let randomVariable = getRandomString();
-  urlDatabase[randomVariable] = req.body.longURL;
-  console.log("test");
+  urlDatabase[randomVariable] = {
+    randomVariable: req.body.longURL,
+    userID: req.cookie.user_id
+  }
   console.log(urlDatabase);
   res.redirect('/urls');
 });
 
 //New page
 app.get("/urls/new", (req, res) => {
+  let validUser = req.cookies["user_id"]
   let templateVars = {
     user: users[req.cookies["user_id"]]
   }
+  if (validUser) {
   res.render("urls_new", templateVars);
+  } else {
+    res.redirect('/login')
+  }
 });
 
 //new post post

@@ -4,11 +4,13 @@
 
 
 <h1>
-  Welcome, <%= user.email %>
+  Welcome,
+  <%= user %>
 </h1>
-  <form method="POST" action="/logout" >
-    <button type="submit">Logout</button>
-  </form>
 
-  <a href="/register">Register</a>
-  <a href="/login">Login</a>
+<form method="POST" action="/logout">
+  <button type="submit">Logout</button>
+</form>
+
+<a href="/register">Register</a>
+<a href="/login">Login</a>

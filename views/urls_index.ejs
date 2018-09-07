@@ -10,20 +10,20 @@
     <%- include partials/_header %>
   </header>
 
-  <h1>
-    <%= user.email %>
-  </h1>
 
-  <h1><center> URLS </center></h1>
-    <ul>
-      <% for(let key in urls) { %>
-      <li>
-      <%= [key] %> : <a href="/u/<%= [key] %>"><%= urls[key] %></a>
+  <h1>
+    <center> URLS </center>
+  </h1>
+  <ul>
+    <% for(let key in urls) { %>
+    <li>
+      <%= [key] %> : <a href="/u/<%= [key] %>">
+        <%= urls[key] %></a>
       <a href="/urls/<%= [key] %>">Edit</a>
-      <form method="POST" action="/urls/<%= [key] %>/delete"><button type ="submit">Delete</button></form>
+      <form method="POST" action="/urls/<%= [key] %>/delete"><button type="submit">Delete</button></form>
       <% } %>
-      </li>
-    </ul>
+    </li>
+  </ul>
 </body>
 
 
