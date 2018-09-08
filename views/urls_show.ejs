@@ -10,19 +10,21 @@
     <%- include partials/_header %>
   </header>
 
-  <h1> URLS </h1>
+  <h2>
+    Edit your URL
+  </h2>
 
   <p>
-    <%= shortURL %> :
-    <%= longURL.longURL %>
+    Your current URL : <%= longURL.longURL %>
   </p>
   <form method="POST" action="/urls/<%= shortURL %>">
     <p>
-      <label for="longURL">LongURL</label>
+      <label for="longURL">Your new URL</label>:
       <input id="longURL" type="text" name="longURL" placeholder="http://" style="width:300px" />
+    </p>
+    <p>
       <button type="submit">Update My URL!</button>
     </p>
-
   </form>
 </body>
 

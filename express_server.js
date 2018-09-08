@@ -193,9 +193,9 @@ app.get("/urls/new", (req, res) => {
 //new post post
 app.post("/urls/:id", (req, res) => {
   let shortURL = req.params.id
-  let newLongURL = req.body['longURL']
+  let newLongURL = req.body.longURL
   let userID = req.session.user_id
-  if (shortURL.userID === userID) {
+  if (urlDatabase[shortURL].userID === userID) {
   urlDatabase[shortURL].longURL = newLongURL;
   res.redirect("/urls")
   } else {

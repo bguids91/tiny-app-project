@@ -2,11 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
-<h1>
-  Welcome,
-  <%= user.id %>
-</h1>
+<font size='4'>tiny<font size='8'>APP </font></b></font>
 
 <% if (!user.id)  {%>
 <a href="/register">Register</a>
@@ -14,7 +10,7 @@
 
 <% } else { %>
 
-<form method="POST" action="/logout">
-  <button type="submit">Logout</button>
-</form>
+<h1>
+  Welcome, <%= user.id %> <form method="POST" action="/logout"> <button type="submit">Logout</button></form>
+</h1>
 <% } %>

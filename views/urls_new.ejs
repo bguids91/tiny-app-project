@@ -5,13 +5,16 @@
   <%- include partials/_header %>
 </header>
 
-
-  <form action="/urls" method="POST" style="margin:150px;">
+<h2>
+  Please add a long URL below that you would like to shorten.
+</h2>
+<p>
+  <form action="/urls" method="POST">
     <label for="longURL"></label>
-    <input id="longURL" type="text" name="longURL" placeholder="http://" style="width:300px" />
+    <input id="longURL" type="text" name="longURL" placeholder="http://"/>
     <input type="submit" value="Submit" />
   </form>
-
+</p>
 
 </body>
 
